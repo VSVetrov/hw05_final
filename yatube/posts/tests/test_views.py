@@ -31,9 +31,9 @@ class PostPagesTests(TestCase):
             b'\x0A\x00\x3B'
         )
         cls.image = SimpleUploadedFile(
-            name='small.gif',
+            name = 'small.gif',
             content = cls.small_gif,
-            content_type='image/gif',
+            content_type ='image/gif',
         )
         cls.group = Group.objects.create(
             title='Тестовая группа',
@@ -148,17 +148,21 @@ class PostPagesTests(TestCase):
 
     def test_follow(self):
         response_1 = self.authorized_client.get(
-            reverse('posts:profile_follow'), 
+            reverse('posts:profile_follow'),
             kwargs={'username': self.post.username}
         )
         response_2 = self.authorized_client.get(
-            reverse('posts:profile_unfollow'), 
+            reverse('posts:profile_unfollow'),
             kwargs={'username': self.post.username}
         )
-        self.assertEqual(response_1, reverse('posts:profile_follow',
-                              kwargs={'username': self.post.username}))
-        self.assertEqual(response_2, reverse('posts:profile_unfollow',
-                              kwargs={'username': self.post.username}))
+        self.assertEqual(response_1, reverse(
+            'posts:profile_follow',
+            kwargs={'username': self.post.username})
+        )
+        self.assertEqual(response_2, reverse(
+            'posts:profile_unfollow',
+            kwargs={'username': self.post.username})
+        )
 
     def test_new_post_for_following(self):
         response = self.authorized_client.get(reverse('posts:follow_index'))
