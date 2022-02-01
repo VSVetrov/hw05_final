@@ -32,7 +32,7 @@ class PostPagesTests(TestCase):
         )
         cls.image = SimpleUploadedFile(
             name='small.gif',
-            content= cls.small_gif,
+            content = cls.small_gif,
             content_type='image/gif',
         )
         cls.group = Group.objects.create(
@@ -97,7 +97,7 @@ class PostPagesTests(TestCase):
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,
-            'image':forms.fields.ImageField
+            'image': forms.fields.ImageField
         }
         for value, expected in form_fields.items():
             with self.subTest(value=value):
@@ -109,7 +109,7 @@ class PostPagesTests(TestCase):
         form_fields = {
             'text': forms.fields.CharField,
             'group': forms.fields.ChoiceField,
-            'image':forms.fields.ImageField
+            'image': forms.fields.ImageField
         }
         for value, expected in form_fields.items():
             with self.subTest(value=value):
@@ -147,18 +147,19 @@ class PostPagesTests(TestCase):
         self.assertContains(response, 'image')
 
     def test_follow(self):
-        response_1 = self.authorized_client.get(reverse('posts:profile_follow'), kwargs={
-            'username': self.post.username})
-        response_2 = self.authorized_client.get(reverse('posts:profile_unfollow'), kwargs={
-            'username': self.post.username})
+        response_1 = self.authorized_client.get(
+            reverse('posts:profile_follow'), 
+            kwargs={'username': self.post.username}
+        )
+        response_2 = self.authorized_client.get(
+            reverse('posts:profile_unfollow'), 
+            kwargs={'username': self.post.username}
+        )
         self.assertEqual(response_1, reverse('posts:profile_follow',
-                              kwargs={'username': self.post.username})
-        )
+                              kwargs={'username': self.post.username}))
         self.assertEqual(response_2, reverse('posts:profile_unfollow',
-                              kwargs={'username': self.post.username})
-        )
+                              kwargs={'username': self.post.username}))
 
     def test_new_post_for_following(self):
         response = self.authorized_client.get(reverse('posts:follow_index'))
         self.assertEqual(response.context['page_obj'], 1)
-        
