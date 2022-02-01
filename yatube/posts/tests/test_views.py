@@ -31,9 +31,9 @@ class PostPagesTests(TestCase):
             b'\x0A\x00\x3B'
         )
         cls.image = SimpleUploadedFile(
-            name = 'small.gif',
-            content = cls.small_gif,
-            content_type ='image/gif',
+            name='small.gif',
+            content=cls.small_gif,
+            content_type='image/gif',
         )
         cls.group = Group.objects.create(
             title='Тестовая группа',
