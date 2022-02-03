@@ -103,7 +103,7 @@ class PostURLTests(TestCase):
     def test_follow(self):
         response = self.authorized_client.get(
             reverse('posts:profile_follow',
-            kwargs={'username': self.user.username})
+                    kwargs={'username': self.user.username})
         )
         self.assertRedirects(
             response, (f'/profile/{self.user}/'))
@@ -111,7 +111,7 @@ class PostURLTests(TestCase):
     def test_unfollow(self):
         response = self.authorized_client.get(
             reverse('posts:profile_unfollow',
-            kwargs={'username': self.user.username})
+                    kwargs={'username': self.user.username})
         )
         self.assertRedirects(
             response, (f'/profile/{self.user}/'))
