@@ -114,4 +114,4 @@ class PostURLTests(TestCase):
                     kwargs={'username': self.user.username})
         )
         self.assertRedirects(
-            response, (f'/follow/'))
+            response, ('/follow/'))
