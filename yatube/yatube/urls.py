@@ -31,6 +31,10 @@ urlpatterns = [
     path('about/', include('about.urls', namespace='about')),
 ]
 
+handler404 = 'core.views.page_not_found'
+handler403 = 'core.views.page_403'
+handler500 = 'core.views.page_500'
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT

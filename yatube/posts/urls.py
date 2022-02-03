@@ -24,3 +24,5 @@ urlpatterns = [
         name='profile_unfollow'
     ),
 ]
+
+handler404 = 'core.views.page_not_found'

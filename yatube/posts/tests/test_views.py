@@ -1,5 +1,6 @@
 import shutil
 import tempfile
+from xml.etree.ElementTree import Comment
 
 from django import forms
 from django.conf import settings

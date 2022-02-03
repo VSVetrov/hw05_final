@@ -3,7 +3,7 @@
 {% block title %}Подписки пользователя {{user.username}}{% endblock %}
 {% block content %}
   <h1>Подписки пользователя {{user.username}}</h1>
-  {% include 'posts/includes/switcher.html' with {index:index} follow=True %}
+  {% include 'posts/includes/switcher.html' with follow=True %}
   {% if page_obj %}
     {% for post in page_obj %}
       <article>
@@ -36,5 +36,5 @@
       </ul>
     </article>
   {% endif %}
-  {% include 'posts/includes/paginator.html' %}
+  {% include 'includes/paginator.html' %}
 {% endblock %}
