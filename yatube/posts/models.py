@@ -50,24 +50,18 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    post = models.TextField('Текст', unique=True)
+    post = models.ForeignKey(
+        Post,
+        on_delete=True,
+        related_name='comments',
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='comments',
-        verbose_name='создатель комментария'
     )
     text = models.TextField('Текст', help_text='Текст нового комментария')
     created = models.DateTimeField('Дата публикации', auto_now_add=True)
-    group = models.ForeignKey(
-        Group,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name='comments',
-        verbose_name='Группа для комментариев',
-        help_text='Выберите группу'
-    )
 
 
 class Follow(models.Model):

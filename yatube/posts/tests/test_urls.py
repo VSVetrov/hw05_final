@@ -99,3 +99,18 @@ class PostURLTests(TestCase):
         self.assertRedirects(
             response, (f'/auth/login/?next=/posts/{self.post.id}/comment')
         )
+    def test_follow(self):
+        response = self.authorized_client.get(
+            reverse('posts:profile_follow',
+            kwargs={'username': self.user.username}
+        ))       
+        self.assertRedirects(
+            response, (f'/profile/{self.user}/'))
+
+    def test_unfollow(self):
+        response = self.authorized_client.get(
+            reverse('posts:profile_unfollow',
+            kwargs={'username': self.user.username}
+        ))       
+        self.assertRedirects(
+            response, (f'/profile/{self.user}/'))
