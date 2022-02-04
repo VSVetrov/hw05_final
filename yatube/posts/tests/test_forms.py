@@ -28,6 +28,10 @@ class PostCreateFormTests(TestCase):
             'posts:post_edit',
             args=[cls.post.id]
         )
+        cls.add_comment_url = reverse(
+            'posts:add_comment',
+            args=[cls.post.id]
+        )
 
     def setUp(self):
         self.auth_client = Client()
@@ -61,4 +65,18 @@ class PostCreateFormTests(TestCase):
         edited_post = Post.objects.last()
         self.assertEqual(edited_post.text, 'text')
         self.assertEqual(Post.objects.count(), posts_count)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_comment(self):
+        form_data = {
+            'text': 'text',
+            'slug': 'first',
+        }
+        response = self.auth_client.post(
+            self.add_comment_url,
+            data=form_data,
+            follow=True
+        )
+        comments_post = Post.objects.last()
+        self.assertEqual(comments_post.text, 'Тестовая группа')
         self.assertEqual(response.status_code, 200)

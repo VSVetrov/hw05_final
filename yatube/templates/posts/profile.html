@@ -12,12 +12,14 @@
       Отписаться
     </a>
   {% else %}
+    {% if request.user != author%}
       <a
         class="btn btn-lg btn-primary"
         href="{% url 'posts:profile_follow' author.username %}" role="button"
       >
         Подписаться
       </a>
+      {% endif %}
   {% endif %}
   {% for post in page_obj %}
   <article>

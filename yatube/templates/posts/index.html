@@ -2,14 +2,29 @@
 {% block title %}Последние обновления на сайте{% endblock %}
 {% block content %}
 {% load cache %}
-  {% include 'posts/includes/switcher.html' %}
+  {% include 'posts/includes/switcher.html' with index=True %}
   {% cache 60 index_page %}
-  {% for post in page_obj %}  
+  {% for post in page_obj %}
+  <article>
+    <ul>
+      <li>
+        Автор: {{ post.author.get_full_name }}
+        <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+      </li>
+      <li>
+        Дата публикации: {{ post.pub_date|date:"d E Y" }} 
+      </li>
+    </ul>
+    <p>
+      {{ post.text|linebreaksbr }}
+    </p>  
     {% if post.group %}   
       <a href="{% url 'posts:group_list' post.group.slug %}">
         все записи группы
       </a>
     {% endif %}
+    <a href="{% url 'posts:post_detail' post.pk %}">подробная информация</a>
+  </article>
     {% if not forloop.last %}<hr>{% endif %}
   {% endfor %}
   {% endcache %} 

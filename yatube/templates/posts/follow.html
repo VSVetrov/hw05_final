@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
-{% block title %}Подписки пользователя {{user.username}}{% endblock %}
+{% block title %}Подписки пользователя {{ user.username }}{% endblock %}
 {% block content %}
-  <h1>Подписки пользователя {{user.username}}</h1>
+  <h1>Подписки пользователя {{ user.username }}</h1>
   {% include 'posts/includes/switcher.html' with follow=True %}
   {% if page_obj %}
     {% for post in page_obj %}

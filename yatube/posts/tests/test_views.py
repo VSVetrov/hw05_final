@@ -9,7 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..models import Group, Post
+from ..models import Group, Post, Follow
 
 User = get_user_model()
 
@@ -68,6 +68,26 @@ class PostPagesTests(TestCase):
             'username': self.post.author}))
         self.assertEqual(response.context['post_count'], 1)
 
+    def test_post_detail_page_show_correct_context(self):
+        response = self.authorized_client.get(reverse(
+        'posts:post_detail', kwargs={'post_id': self.post.id}
+    ))
+        self.assertEqual(response.context['post_count'], 1)
+
+
+    def test_post_edit_page_show_correct_context(self):
+        response = self.authorized_client.get(reverse(
+            'posts:post_edit', kwargs={'post_id': self.post.id}
+        ))
+        form_fields = {
+            self.post.text: response.context['form']['text'].value(),
+            self.post.group.id: response.context[
+                'form']['group'].value(),
+        }
+        for value, expected in form_fields.items():
+            with self.subTest(value=value):
+                self.assertEqual(value, expected)
+
     def test_create_post_page_show_correct_context(self):
         response = self.authorized_client.get(reverse('posts:post_create'))
         form_fields = {
@@ -79,36 +99,18 @@ class PostPagesTests(TestCase):
             with self.subTest(value=value):
                 form_field = response.context.get('form').fields.get(value)
             self.assertIsInstance(form_field, expected)
+        self.assertContains(response, 'image')
 
     def test_index_cache(self):
         cache.clear()
         response_1 = self.authorized_client.get(reverse('posts:index'))
-        self.post.delete()
+        Post.objects.all().delete()
         response_2 = self.authorized_client.get(reverse('posts:index'))
         self.assertEqual(response_1.content, response_2.content)
         cache.delete('index_page')
         cache.clear()
         response_3 = self.authorized_client.get(reverse('posts:index'))
         self.assertNotEqual(response_1.content, response_3.content)
-
-    def test_create_post(self):
-        post_count = Post.objects.count()
-        form_data = {
-            'text': 'Тестовый текст новый',
-            'group': self.group.id,
-            'image': 'posts/small.gif',
-        }
-        response = self.authorized_client.post(
-            reverse('posts:post_create'),
-            data=form_data,
-            follow=True
-        )
-        self.assertRedirects(
-            response, reverse('posts:profile',
-                              kwargs={'username': self.user.username})
-        )
-        self.assertEqual(Post.objects.count(), post_count + 1)
-        self.assertContains(response, 'image')
 
     def test_new_post_for_following(self):
         post_count = Post.objects.count()
@@ -132,3 +134,18 @@ class PostPagesTests(TestCase):
     def tearDownClass(cls):
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
+
+    def test_following(self):
+        
+        followers_count = Follow.objects.filter(author__id=self.user.id).count()
+
+        response = self.authorized_client.post(reverse(
+        'posts:profile_follow', kwargs={'username': self.user.username}))
+
+        self.assertRedirects(
+            response, reverse('posts:profile',
+                              kwargs={'username': self.user.username})
+        )
+        self.assertEqual(Follow.objects.count(), followers_count)
+        # застопорился с созданием подписки, чтобы ее правильно посчитать
+        # отписка, как я понимаю будет схожей

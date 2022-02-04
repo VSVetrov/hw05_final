@@ -1,6 +1,7 @@
+from xml.etree.ElementTree import Comment
 from django.contrib import admin
 
-from .models import Group, Post
+from .models import Follow, Group, Post, Comment
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -35,3 +36,5 @@ class GroupAdmin (admin.ModelAdmin):
 
 
 admin.site.register(Group)
+admin.site.register(Comment)
+admin.site.register(Follow)

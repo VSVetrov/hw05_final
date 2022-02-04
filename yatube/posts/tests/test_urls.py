@@ -97,7 +97,7 @@ class PostURLTests(TestCase):
             reverse('posts:add_comment', kwargs={'post_id': self.post.id})
         )
         self.assertRedirects(
-            response, (f'/auth/login/?next=/posts/{self.post.id}/comment')
+            response, (f'/auth/login/?next=/posts/{self.post.id}/comment/')
         )
 
     def test_follow(self):

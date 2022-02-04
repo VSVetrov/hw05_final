@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentForm, PostForm
-from .models import Follow, Group, Post, User
+from .models import Comment, Follow, Group, Post, User
 
 
 def index(request):
@@ -38,15 +38,18 @@ def group_posts(request, slug):
 def profile(request, username):
     template = 'posts/profile.html'
     author = get_object_or_404(User, username=username)
+    user = request.user != author
     post_list = author.posts.all()
     post_count = post_list.count()
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    following = Follow.objects.filter(user=user, author=author)
     context = {
         'post_count': post_count,
         'page_obj': page_obj,
         'author': author,
+        'following': following,
     }
     return render(request, template, context)
 
@@ -56,11 +59,13 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     author = post.author
     post_count = author.posts.all().count()
-    comment_form = CommentForm(request.POST or None)
+    comment_form = CommentForm(request.POST)
+    comments = post.comments.all()
     context = {
         'post': post,
         'post_count': post_count,
         "form": comment_form,
+        'comments': comments,
     }
     return render(request, template, context)
 
@@ -104,7 +109,7 @@ def post_edit(request, post_id):
 
 @login_required
 def add_comment(request, post_id):
-    post = Post.objects.get(pk=post_id)
+    post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST or None)
     if form.is_valid():
         comment = form.save(commit=False)
@@ -121,10 +126,9 @@ def follow_index(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'user': request.user,
         'page_obj': page_obj,
     }
-    return render(request, 'posts/includes/follow.html', context)
+    return render(request, 'posts/follow.html', context)
 
 
 @login_required
