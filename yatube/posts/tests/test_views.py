@@ -138,7 +138,7 @@ class PostPagesTests(TestCase):
         followers_count = Follow.objects.filter(
             author__id=self.user.id).count()
         response = self.authorized_client.post(reverse(
-        'posts:profile_follow', kwargs={'username': self.user.username})
+            'posts:profile_follow', kwargs={'username': self.user.username})
         )
         self.assertRedirects(
             response, reverse('posts:profile',
