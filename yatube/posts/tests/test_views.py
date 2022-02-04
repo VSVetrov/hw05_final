@@ -70,10 +70,9 @@ class PostPagesTests(TestCase):
 
     def test_post_detail_page_show_correct_context(self):
         response = self.authorized_client.get(reverse(
-        'posts:post_detail', kwargs={'post_id': self.post.id}
-    ))
+        'posts:post_detail', kwargs={'post_id': self.post.id})
+        )
         self.assertEqual(response.context['post_count'], 1)
-
 
     def test_post_edit_page_show_correct_context(self):
         response = self.authorized_client.get(reverse(
@@ -136,12 +135,11 @@ class PostPagesTests(TestCase):
         super().tearDownClass()
 
     def test_following(self):
-        
-        followers_count = Follow.objects.filter(author__id=self.user.id).count()
-
+        followers_count = Follow.objects.filter(
+            author__id=self.user.id).count()
         response = self.authorized_client.post(reverse(
-        'posts:profile_follow', kwargs={'username': self.user.username}))
-
+        'posts:profile_follow', kwargs={'username': self.user.username})
+        )
         self.assertRedirects(
             response, reverse('posts:profile',
                               kwargs={'username': self.user.username})
