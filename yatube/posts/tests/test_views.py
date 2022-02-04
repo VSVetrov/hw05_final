@@ -69,8 +69,8 @@ class PostPagesTests(TestCase):
         self.assertEqual(response.context['post_count'], 1)
 
     def test_post_detail_page_show_correct_context(self):
-        response = self.authorized_client.get(reverse(
-        'posts:post_detail', kwargs={'post_id': self.post.id})
+        response = self.authorized_client.get(
+            reverse('posts:post_detail', kwargs={'post_id': self.post.id})
         )
         self.assertEqual(response.context['post_count'], 1)
 
