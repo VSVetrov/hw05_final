@@ -56,7 +56,7 @@ class PostPagesTests(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user_1)
         self.authorized_client.force_login(self.user)
-        
+
     def test_home_page_show_correct_context(self):
         response = self.guest_client.get(reverse('posts:index'))
         self.assertEqual(len(response.context['page_obj']), 1)
@@ -118,8 +118,7 @@ class PostPagesTests(TestCase):
         post = Post.objects.filter(author=self.user_1)
         response = self.authorized_client.get(
             reverse('posts:follow_index', kwargs={'username': 'author'}),
-            )
-        
+        )
         self.assertEqual(response, post)
 
     def test_following(self):
@@ -129,7 +128,7 @@ class PostPagesTests(TestCase):
         followers_count = Follow.objects.filter(
             user=self.user_1,
             author=self.user_2,
-            ).exists()            
+        ).exists()
         self.assertRedirects(
             response, reverse('posts:profile',
                               kwargs={'username': self.user_1})

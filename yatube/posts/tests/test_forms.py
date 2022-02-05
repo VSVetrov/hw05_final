@@ -17,7 +17,6 @@ class PostCreateFormTests(TestCase):
         cls.user_auth = User.objects.create_user(username='test_auth_user')
         cls.another = Client()
         cls.another.force_login(cls.user_auth)
-       
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='test-slug',
@@ -51,7 +50,7 @@ class PostCreateFormTests(TestCase):
             args=[cls.post.id]
         )
         cls.post_detail_url = reverse(
-         'posts:post_detail', args=[cls.post.id]
+            'posts:post_detail', args=[cls.post.id]
         )
 
     def setUp(self):
@@ -73,7 +72,6 @@ class PostCreateFormTests(TestCase):
         self.assertEqual(Post.objects.count(), posts_count + 1)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'image')
-        
 
     def test_post_edit(self):
         posts_count = Post.objects.count()
