@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Профайл пользователя {{author}}{% endblock %}
+{% block title %}Профайл пользователя {{ author }}{% endblock %}
 {% block content %}
 {% load thumbnail %}
   <h1>Все посты пользователя {{ post.author.get_full_name }} </h1>

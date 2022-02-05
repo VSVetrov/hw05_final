@@ -1,7 +1,8 @@
 from xml.etree.ElementTree import Comment
+
 from django.contrib import admin
 
-from .models import Follow, Group, Post, Comment
+from .models import Comment, Follow, Group, Post
 
 
 class PostAdmin(admin.ModelAdmin):

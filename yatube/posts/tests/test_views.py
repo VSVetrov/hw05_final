@@ -9,7 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..models import Group, Post, Follow
+from ..models import Follow, Group, Post
 
 User = get_user_model()
 
@@ -22,6 +22,8 @@ class PostPagesTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username='username')
+        cls.user_1 = User.objects.create_user(username='user_1')
+        cls.user_2 = User.objects.create_user(username='user_2')
         cls.small_gif = (
             b'\x47\x49\x46\x38\x39\x61\x02\x00'
             b'\x01\x00\x80\x00\x00\x00\x00\x00'
@@ -52,8 +54,9 @@ class PostPagesTests(TestCase):
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
+        self.authorized_client.force_login(self.user_1)
         self.authorized_client.force_login(self.user)
-
+        
     def test_home_page_show_correct_context(self):
         response = self.guest_client.get(reverse('posts:index'))
         self.assertEqual(len(response.context['page_obj']), 1)
@@ -112,38 +115,28 @@ class PostPagesTests(TestCase):
         self.assertNotEqual(response_1.content, response_3.content)
 
     def test_new_post_for_following(self):
-        post_count = Post.objects.count()
-        form_data = {
-            'text': 'Тестовый текст новый',
-            'group': self.group.id,
-            'author': 'following',
-        }
-        response = self.authorized_client.post(
-            reverse('posts:post_create'),
-            data=form_data,
-            follow=True
+        post = Post.objects.filter(author=self.user_1)
+        response = self.authorized_client.get(
+            reverse('posts:follow_index', kwargs={'username': 'author'}),
+            )
+        
+        self.assertEqual(response, post)
+
+    def test_following(self):
+        response = self.authorized_client.post(reverse(
+            'posts:profile_follow', kwargs={'username': self.user_1})
         )
+        followers_count = Follow.objects.filter(
+            user=self.user_1,
+            author=self.user_2,
+            ).exists()            
         self.assertRedirects(
             response, reverse('posts:profile',
-                              kwargs={'username': self.user.username})
+                              kwargs={'username': self.user_1})
         )
-        self.assertEqual(Post.objects.count(), post_count + 1)
+        self.assertEqual(Follow.objects.count(), followers_count + 1)
 
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
-
-    def test_following(self):
-        followers_count = Follow.objects.filter(
-            author__id=self.user.id).count()
-        response = self.authorized_client.post(reverse(
-            'posts:profile_follow', kwargs={'username': self.user.username})
-        )
-        self.assertRedirects(
-            response, reverse('posts:profile',
-                              kwargs={'username': self.user.username})
-        )
-        self.assertEqual(Follow.objects.count(), followers_count)
-        # застопорился с созданием подписки, чтобы ее правильно посчитать
-        # отписка, как я понимаю будет схожей
