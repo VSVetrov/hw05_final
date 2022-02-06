@@ -115,11 +115,18 @@ class PostPagesTests(TestCase):
         self.assertNotEqual(response_1.content, response_3.content)
 
     def test_new_post_for_following(self):
-        post = Post.objects.filter(author=self.user_1)
-        response = self.authorized_client.get(
-            reverse('posts:follow_index', kwargs={'username': 'author'}),
+        Follow.objects.create(
+            user=self.user,
+            author=self.user_2,
         )
-        self.assertEqual(response, post)
+        post_user_2 = Post.objects.create(
+            author=self.user_2,
+            text='test_follow_context',
+            group=self.group,
+    )
+        response = self.authorized_client.get(reverse('posts:follow_index'))
+        context_objects = response.context['page_obj']
+        self.assertIn(post_user_2, context_objects)
 
     def test_following(self):
         response = self.authorized_client.post(reverse(
