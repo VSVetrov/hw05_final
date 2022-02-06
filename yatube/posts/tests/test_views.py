@@ -123,7 +123,7 @@ class PostPagesTests(TestCase):
             author=self.user_2,
             text='test_follow_context',
             group=self.group,
-    )
+        )
         response = self.authorized_client.get(reverse('posts:follow_index'))
         context_objects = response.context['page_obj']
         self.assertIn(post_user_2, context_objects)
