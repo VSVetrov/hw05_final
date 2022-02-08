@@ -135,7 +135,7 @@ class PostPagesTests(TestCase):
         followers_count = Follow.objects.filter(
             user=self.user_1,
             author=self.user_2,
-        ).exists()
+        ).count()
         self.assertRedirects(
             response, reverse('posts:profile',
                               kwargs={'username': self.user_1})
@@ -143,15 +143,19 @@ class PostPagesTests(TestCase):
         self.assertEqual(Follow.objects.count(), followers_count + 1)
 
     def test_unfollowing(self):
+        Follow.objects.create(
+            user=self.user,
+            author=self.user_2,
+        )
         response = self.authorized_client.post(reverse(
             'posts:profile_unfollow', kwargs={'username': self.user_1})
         )
         followers_count = Follow.objects.filter(
             user=self.user_1,
             author=self.user_2,
-        ).exists()
-        self.assertRedirects(response, ('/follow/'))
-        self.assertEqual(Follow.objects.count(), followers_count)
+        ).count()
+        self.assertRedirects(response, reverse('posts:follow_index'))
+        self.assertEqual(Follow.objects.count(), followers_count + 1)
 
     @classmethod
     def tearDownClass(cls):
