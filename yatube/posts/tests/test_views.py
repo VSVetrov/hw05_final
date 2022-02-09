@@ -148,14 +148,14 @@ class PostPagesTests(TestCase):
             author=self.user_2,
         )
         response = self.authorized_client.post(reverse(
-            'posts:profile_unfollow', kwargs={'username': self.user_1})
+            'posts:profile_unfollow', kwargs={'username': self.user_2})
         )
         followers_count = Follow.objects.filter(
-            user=self.user_1,
+            user=self.user,
             author=self.user_2,
         ).count()
         self.assertRedirects(response, reverse('posts:follow_index'))
-        self.assertEqual(Follow.objects.count(), followers_count + 1)
+        self.assertEqual(Follow.objects.count(), followers_count)
 
     @classmethod
     def tearDownClass(cls):
