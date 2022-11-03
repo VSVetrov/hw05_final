@@ -1,6 +1,4 @@
-#hw05_final
-##Описание
-Социальная сеть блогеров. Учебный проект.
+# hw05_final
 
 ## Описание
 Социальная сеть блогеров. Учебный проект.
@@ -16,6 +14,7 @@ python version django version pillow version pytest version requests version sor
 
 Клонируйте репозиторий и перейдите в него в командной строке:
 > git clone https://github.com/evencatt/hw05_final.git
+
 > cd hw05_final
 
 Установите и активируйте виртуальное окружение
