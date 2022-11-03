@@ -19,10 +19,13 @@ python version django version pillow version pytest version requests version sor
 Установите и активируйте виртуальное окружение
 - python -m venv venv
 - source venv/Scripts/activate
+
 Установите зависимости из файла requirements.txt
 - pip install -r requirements.txt
-- В папке с файлом manage.py выполните миграции:
+
+В папке с файлом manage.py выполните миграции:
 - python manage.py migrate
+
 В папке с файлом manage.py запустите сервер, выполнив команду:
 - python manage.py runserver
 
