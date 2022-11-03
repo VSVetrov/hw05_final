@@ -1,11 +1,9 @@
-# hw05_final
+# Социальная сеть Yatube
 
 ## Описание
-Социальная сеть блогеров. Учебный проект.
-
 Сообщество для публикаций. Блог с возможностью публикации постов, подпиской на группы и авторов, а также комментированием постов.
 
-## Стек
+## Технологии
 python version django version pillow version pytest version requests version sorl-thumbnail version
 
 ## Запуск проекта в dev-режиме
@@ -13,8 +11,8 @@ python version django version pillow version pytest version requests version sor
 Для прочих инструментов используйте аналоги команд для вашего окружения.
 
 Клонируйте репозиторий и перейдите в него в командной строке:
-- git clone https://github.com/evencatt/hw05_final.git
-- cd hw05_final
+''' git clone https://github.com/evencatt/hw05_final.git
+cd hw05_final '''
 
 Установите и активируйте виртуальное окружение
 - python -m venv venv
