@@ -27,12 +27,11 @@ python -m venv venv
 ```
 source venv/Scripts/activate
 ```
-
 Установите зависимости из файла requirements.txt
-- pip install -r requirements.txt
-
+``` pip install -r requirements.txt
+```
 В папке с файлом manage.py выполните миграции:
-- python manage.py migrate
+python manage.py migrate
 
 В папке с файлом manage.py запустите сервер, выполнив команду:
 - python manage.py runserver
