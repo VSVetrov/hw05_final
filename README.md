@@ -11,8 +11,9 @@ python version django version pillow version pytest version requests version sor
 Для прочих инструментов используйте аналоги команд для вашего окружения.
 
 Клонируйте репозиторий и перейдите в него в командной строке:
-
-```git clone https://github.com/evencatt/hw05_final.git ```
+```
+git clone https://github.com/evencatt/hw05_final.git 
+```
 
 ```cd hw05_final```
 
