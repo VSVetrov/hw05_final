@@ -15,13 +15,18 @@ python version django version pillow version pytest version requests version sor
 git clone https://github.com/evencatt/hw05_final.git 
 ```
 ```
-cd hw05_final```
+cd hw05_final
+```
 
 Установите и активируйте виртуальное окружение
 
-```python -m venv venv```
+```
+python -m venv venv
+```
 
-```source venv/Scripts/activate```
+```
+source venv/Scripts/activate
+```
 
 Установите зависимости из файла requirements.txt
 - pip install -r requirements.txt
